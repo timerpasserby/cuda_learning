@@ -1,1 +1,0 @@
- "/usr/local/cuda-11.4/targets/aarch64-linux/lib/libcudart.so" "/usr/local/cuda-11.4/targets/aarch64-linux/lib/libcublas.so" -lpthread -ldl "/usr/lib/aarch64-linux-gnu/librt.so" -lcudadevrt -lcudart_static -lrt -lpthread -ldl 
