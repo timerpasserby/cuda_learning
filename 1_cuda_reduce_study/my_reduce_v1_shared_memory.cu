@@ -6,24 +6,26 @@
 
 #define THREAD_PER_BLOCK 256
 
-__global__ void reduce(float* d_input, float* d_output) {
-  __shared__ float shared[THREAD_PER_BLOCK];
-  float* input_begin = d_input + blockDim.x * blockIdx.x;
+template <typename DType>
+__global__ void reduce(DType* d_input, DType* d_output) {
+  //  smemory in block
+  __shared__ DType shared[THREAD_PER_BLOCK];
+  DType* input_begin = d_input + blockDim.x * blockIdx.x;
   shared[threadIdx.x] = input_begin[threadIdx.x];
+  // sync all threads in block
+  // 完成数据从global memory到shared memory的拷贝
   __syncthreads();
 
-  for (int i = 1; i < blockDim.x; i *= 2) {
-    if (threadIdx.x % (i * 2) == 0)
+  for (int i = 1; i < blockDim.x; i <<= 1) {
+    if (threadIdx.x % (2 * i) == 0) {
       shared[threadIdx.x] += shared[threadIdx.x + i];
-    __syncthreads();
+    }
+    __syncthreads();  // sync all threads in block
   }
-  // if (threadIdx.x == 0 or 2 or 4 or 6)
-  //     input_begin[threadIdx.x] += input_begin[threadIdx.x + 1];
-  // if (threadIdx.x == 0 or 4)
-  //     input_begin[threadIdx.x] += input_begin[threadIdx.x + 2];
-  // if (threadIdx.x == 0)
-  //     input_begin[threadIdx.x] += input_begin[threadIdx.x + 4];
-  if (threadIdx.x == 0) d_output[blockIdx.x] = shared[0];
+  // threadIdx.x == 0
+  if (threadIdx.x == 0) {
+    d_output[blockIdx.x] = shared[0];
+  }
 }
 
 bool check(float* out, float* res, int n) {
