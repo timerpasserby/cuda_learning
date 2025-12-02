@@ -1,0 +1,5 @@
+{
+    "cmake.ignoreCMakeListsMissing": true,
+    "remote.SSH.useLocalServer": false,
+    "remote.SSH.showLoginTerminal": true
+}

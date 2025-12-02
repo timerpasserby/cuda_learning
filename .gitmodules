@@ -1,0 +1,3 @@
+[submodule "How_to_optimize_in_gpu"]
+	path = How_to_optimize_in_gpu
+	url = https://github.com/timerpasserby/How_to_optimize_in_GPU.git
