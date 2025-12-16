@@ -1,6 +1,14 @@
 cmake_minimum_required(VERSION 3.20.0)
 set(CMAKE_CUDA_COMPILER "/usr/local/cuda/bin/nvcc")
+# 设置CUDA路径
+if(NOT DEFINED ENV{CUDA_PATH})
+    set(CUDA_PATH "/usr/local/cuda")
+else()
+    set(CUDA_PATH $ENV{CUDA_PATH})
+endif()
 
+# 包含CUDA头文件
+include_directories(${CUDA_PATH}/include)
 project(cuda_learning VERSION 0.1.0 LANGUAGES CUDA CXX C)
 set(CMAKE_CUDA_ARCHITECTURES 75)
 # 启用CUDA支持
